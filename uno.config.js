@@ -79,5 +79,7 @@ export default defineConfig({
     ...themeConfig.site.socialLinks.map(social => `i-mdi-${social.name}`),
     'i-mdi-content-copy',
     'i-mdi-check',
+    'i-mdi-weather-sunny',
+    'i-mdi-weather-night',
   ],
 })

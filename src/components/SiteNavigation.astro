@@ -1,5 +1,6 @@
 ---
 import { themeConfig } from '~/.config'
+import ThemeToggle from '~/components/ThemeToggle.astro'
 
 const { navLinks, socialLinks } = themeConfig.site
 const { translate: t } = Astro.locals
@@ -27,5 +28,8 @@ const { translate: t } = Astro.locals
         </li>
       ))
     }
+    <li>
+      <ThemeToggle />
+    </li>
   </ul>
 </nav>

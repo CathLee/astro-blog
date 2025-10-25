@@ -10,7 +10,8 @@ html {
 
   text-shadow: 1px 1px 1px var(--uno-colors-shadow);
   background-size: 7px 7px;
-  background-image: linear-gradient(to right, var(--uno-colors-shadow) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right, var(--uno-colors-shadow) 1px, transparent 1px),
     linear-gradient(to bottom, var(--uno-colors-shadow) 1px, transparent 1px);
 }
 
@@ -19,4 +20,31 @@ html {
   --at-apply: 'decoration-underline decoration-0.1em decoration-offset-2px';
   --at-apply: 'ease-in-out duration-300ms';
   --at-apply: 'hover:(c-background bg-primary decoration-primary)';
+}
+
+/* 深色模式下的 prose 样式 */
+html.dark .prose {
+  --un-prose-body: #e5e5e5;
+  --un-prose-headings: #ffffff;
+  --un-prose-links: #ffffff;
+  --un-prose-bold: #ffffff;
+  --un-prose-code: #ffffff;
+  --un-prose-borders: #404040;
+  --un-prose-bg-soft: #1a1a1a;
+}
+
+html.dark .prose :where(p, li, td, th) {
+  color: #e5e5e5;
+}
+
+html.dark .prose :where(h1, h2, h3, h4, h5, h6) {
+  color: #ffffff;
+}
+
+html.dark .prose :where(strong, b) {
+  color: #ffffff;
+}
+
+html.dark .prose :where(a) {
+  color: #ffffff;
 }

@@ -5,24 +5,31 @@ const theme = themeConfig.appearance.theme
 ---
 
 <script is:inline define:vars={{ theme }}>
-  function updateTheme(theme) {
-    // Check if theme is system
-    if (theme === 'system') {
-      // Check OS preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      document.documentElement.classList.toggle('dark', prefersDark)
-      return
+  function updateTheme() {
+    // 优先使用 localStorage 中保存的主题
+    const stored = localStorage.getItem('theme')
+    let isDark = false
+
+    if (stored) {
+      // 如果用户手动设置了主题，使用保存的值
+      isDark = stored === 'dark'
+    } else if (theme === 'system' || !theme) {
+      // 否则根据系统偏好
+      isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    } else {
+      // 使用配置的主题
+      isDark = theme === 'dark'
     }
-    // Set theme directly
-    document.documentElement.classList.toggle('dark', theme === 'dark')
+
+    document.documentElement.classList.toggle('dark', isDark)
   }
 
-  // Initial theme setup
-  updateTheme(theme)
+  // 初始化主题
+  updateTheme()
 
-  // Listen for OS theme changes
+  // 监听系统主题变化（仅当用户未手动设置时）
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (theme === 'system') {
+    if (!localStorage.getItem('theme')) {
       document.documentElement.classList.toggle('dark', e.matches)
     }
   })
