@@ -27,7 +27,18 @@ const spec = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/spec' }),
 })
 
+const album = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/album' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    image: z.string(),
+    location: z.string().optional(),
+  }),
+})
+
 export const collections = {
   posts,
   spec,
+  album,
 }
