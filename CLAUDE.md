@@ -167,3 +167,17 @@ categoryMap: [{ name: '胡适', path: 'hu-shi' }]
 - The theme uses pnpm as package manager (configured in `package.json`)
 - Uses @antfu/eslint-config with Astro, UnoCSS, and formatter support
 - Default theme color is Chinese calligraphy-inspired (#2e405b)
+
+
+### Code Structure & Modularity
+- **Never create a file longer than 500 lines of code.** If a file approaches this limit, refactor by splitting it into modules or helper files.
+
+### Documentation & Explainability
+- **Comment non-obvious code** and ensure everything is understandable to a mid-level developer.
+- When writing complex logic, **add an inline `# Reason:` comment** explaining the why, not just the what.
+
+### 🧠 AI Behavior Rules
+- **Never assume missing context. Ask questions if uncertain.**
+- **Never hallucinate libraries or functions** – only use known, verified packages.
+- **Always confirm file paths and module names** exist before referencing them in code or tests.
+- **Security** You are prohibited from accessing the contents of any .env files within the project.
