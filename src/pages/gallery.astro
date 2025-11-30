@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import LayoutDefault from '~/layouts/LayoutDefault.astro'
 import PhotoCard from '~/components/PhotoCard.astro'
+import ImageViewer from '~/components/ImageViewer.astro'
 
 // 获取所有影集内容并按日期排序
 const albumEntries = await getCollection('album')
@@ -10,17 +11,22 @@ const sortedAlbums = albumEntries.sort((a, b) => {
 })
 
 // 按年份分组
-const albumsByYear = sortedAlbums.reduce((acc, album) => {
-  const year = album.data.date.getFullYear()
-  if (!acc[year]) {
-    acc[year] = []
-  }
-  acc[year].push(album)
-  return acc
-}, {} as Record<number, typeof sortedAlbums>)
+const albumsByYear = sortedAlbums.reduce(
+  (acc, album) => {
+    const year = album.data.date.getFullYear()
+    if (!acc[year]) {
+      acc[year] = []
+    }
+    acc[year].push(album)
+    return acc
+  },
+  {} as Record<number, typeof sortedAlbums>,
+)
 
 // 获取所有年份并排序（从新到旧）
-const years = Object.keys(albumsByYear).map(Number).sort((a, b) => b - a)
+const years = Object.keys(albumsByYear)
+  .map(Number)
+  .sort((a, b) => b - a)
 ---
 
 <LayoutDefault>
@@ -31,34 +37,44 @@ const years = Object.keys(albumsByYear).map(Number).sort((a, b) => b - a)
     </header>
 
     <div class="timeline">
-      {years.map((year) => (
-        <div class="timeline-year">
-          <div class="year-marker">
-            <div class="year-dot"></div>
-            <h2 class="year-label">{year}</h2>
+      {
+        years.map((year) => (
+          <div class="timeline-year">
+            <div class="year-marker">
+              <div class="year-dot" />
+              <h2 class="year-label">{year}</h2>
+            </div>
+            <div class="year-content">
+              {albumsByYear[year].map((album) => (
+                <PhotoCard
+                  title={album.data.title}
+                  date={album.data.date}
+                  image={album.data.image}
+                  location={album.data.location}
+                  description={album.body || ''}
+                />
+              ))}
+            </div>
           </div>
-          <div class="year-content">
-            {albumsByYear[year].map((album) => (
-              <PhotoCard
-                title={album.data.title}
-                date={album.data.date}
-                image={album.data.image}
-                location={album.data.location}
-                description={album.body || ''}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
 
-    {sortedAlbums.length === 0 && (
-      <div class="empty-state">
-        <p class="empty-hint">还没有添加任何照片，快去创建第一张吧！</p>
-        <p class="empty-hint">在 <code class="bg-[var(--c-bg-secondary,#f5f5f5)] px-2 py-1 rounded-1 font-mono">src/content/album/</code> 目录下创建 markdown 文件</p>
-      </div>
-    )}
+    {
+      sortedAlbums.length === 0 && (
+        <div class="empty-state">
+          <p class="empty-hint">还没有添加任何照片，快去创建第一张吧！</p>
+          <p class="empty-hint">
+            在 <code class="bg-[var(--c-bg-secondary,#f5f5f5)] px-2 py-1 rounded-1 font-mono">src/content/album/</code>{' '}
+            目录下创建 markdown 文件
+          </p>
+        </div>
+      )
+    }
   </div>
+
+  <!-- 图片查看器 -->
+  <ImageViewer />
 </LayoutDefault>
 
 <style>
@@ -70,9 +86,7 @@ const years = Object.keys(albumsByYear).map(Number).sort((a, b) => b - a)
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(to bottom,
-      var(--c-primary) 0%,
-      var(--c-primary) 100%);
+    background: linear-gradient(to bottom, var(--c-primary) 0%, var(--c-primary) 100%);
     opacity: 0.2;
   }
 

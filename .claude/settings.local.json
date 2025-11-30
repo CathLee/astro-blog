@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm typecheck:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm lint:fix:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

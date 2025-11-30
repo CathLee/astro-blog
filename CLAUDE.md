@@ -42,6 +42,7 @@ The theme uses a layered configuration approach:
 - **Config exports**: `src/.config/index.ts` - Merges configs and exports as `themeConfig`
 
 Configuration is imported in multiple places:
+
 - `astro.config.ts` for Astro site settings
 - `uno.config.js` for UnoCSS theming
 - Throughout components for site metadata
@@ -64,6 +65,7 @@ TypeScript path alias `~/*` maps to `src/*` (configured in `tsconfig.json`)
 ### Layouts
 
 Three main layouts in `src/layouts/`:
+
 - `LayoutDefault.astro` - Base layout with SEO, theme, analytics
 - `LayoutPost.astro` - Individual post pages with comments
 - `LayoutPostList.astro` - Archive and category list pages
@@ -109,6 +111,7 @@ Set locale in user config: `appearance.locale`
 ### Integrations
 
 Configured in `astro.config.ts`:
+
 - **Swup** - Page transitions
 - **Sitemap** - Auto-generated sitemap
 - **robots.txt** - Via `astro-robots-txt`
@@ -125,11 +128,13 @@ Configured in `astro.config.ts`:
 ### Adding a New Post
 
 Use the CLI tool for consistency:
+
 ```bash
 pnpm theme:create
 ```
 
 Or manually create in `src/content/posts/` with required frontmatter:
+
 ```yaml
 ---
 title: Post Title
@@ -143,6 +148,7 @@ draft: false
 ### Modifying Theme Appearance
 
 Edit `src/.config/user.ts` to override defaults. Common customizations:
+
 - Site metadata (`site.title`, `site.author`, etc.)
 - Navigation links (`site.navLinks`)
 - Social links (`site.socialLinks` - uses MDI icon names)
@@ -156,6 +162,7 @@ Add to `site.navLinks` in user config, then create corresponding page in `src/pa
 ### Custom Category URL Mapping
 
 Use `site.categoryMap` to map category display names to URL-friendly paths:
+
 ```ts
 categoryMap: [{ name: '胡适', path: 'hu-shi' }]
 ```
@@ -168,15 +175,17 @@ categoryMap: [{ name: '胡适', path: 'hu-shi' }]
 - Uses @antfu/eslint-config with Astro, UnoCSS, and formatter support
 - Default theme color is Chinese calligraphy-inspired (#2e405b)
 
-
 ### Code Structure & Modularity
+
 - **Never create a file longer than 500 lines of code.** If a file approaches this limit, refactor by splitting it into modules or helper files.
 
 ### Documentation & Explainability
+
 - **Comment non-obvious code** and ensure everything is understandable to a mid-level developer.
 - When writing complex logic, **add an inline `# Reason:` comment** explaining the why, not just the what.
 
 ### 🧠 AI Behavior Rules
+
 - **Never assume missing context. Ask questions if uncertain.**
 - **Never hallucinate libraries or functions** – only use known, verified packages.
 - **Always confirm file paths and module names** exist before referencing them in code or tests.

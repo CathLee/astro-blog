@@ -13,8 +13,8 @@ import { formatDate } from '~/utils'
 ---
 
 <article class="photo-card">
-  <div class="photo-image">
-    <img src={image} alt={title} loading="lazy" class="w-full h-full object-cover transition-transform duration-300 ease" />
+  <div class="photo-image" role="button" tabindex="0" data-image={image} data-title={title}>
+    <img src={image} alt={title} loading="lazy" class="w-full h-full object-cover" />
   </div>
   <div class="photo-content">
     <h3 class="photo-title">{title}</h3>
@@ -29,8 +29,133 @@ import { formatDate } from '~/utils'
 </article>
 
 <style>
-  /* 图片悬停缩放效果 - 需要嵌套选择器 */
-  .photo-card:hover .photo-image img {
-    transform: scale(1.05);
+  .photo-card {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: var(--c-bg);
+    border-radius: 8px;
+  }
+
+  .photo-image {
+    overflow: hidden;
+    border-radius: 6px;
+    aspect-ratio: 4 / 3;
+    cursor: pointer;
+  }
+
+  .photo-image:hover {
+    opacity: 0.9;
+  }
+
+  .photo-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .photo-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+    color: var(--c-primary);
+  }
+
+  .photo-meta {
+    font-size: 0.875rem;
+    color: var(--c-text-secondary, #666);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .photo-description {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--c-text);
+    margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .photo-card {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .photo-image {
+      aspect-ratio: 16 / 9;
+    }
+
+    .photo-content {
+      gap: 0.75rem;
+    }
+
+    .photo-title {
+      font-size: 1.25rem;
+    }
+
+    .photo-meta {
+      font-size: 0.8125rem;
+    }
+
+    .photo-description {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
   }
 </style>
+
+<script>
+  // 为所有图片添加点击事件
+  function initPhotoClick() {
+    const photoImages = document.querySelectorAll('.photo-image')
+
+    photoImages.forEach((photoImage) => {
+      const handleClick = () => {
+        const imageSrc = photoImage.getAttribute('data-image')
+        const imageTitle = photoImage.getAttribute('data-title')
+
+        if (imageSrc && imageTitle && (window as any).openImageViewer) {
+          ;(window as any).openImageViewer(imageSrc, imageTitle)
+        }
+      }
+
+      photoImage.addEventListener('click', handleClick)
+
+      // 支持键盘访问
+      photoImage.addEventListener('keydown', (e) => {
+        if (e instanceof KeyboardEvent && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          handleClick()
+        }
+      })
+    })
+  }
+
+  // 页面加载时初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotoClick)
+  } else {
+    initPhotoClick()
+  }
+
+  // Swup 页面切换后重新初始化
+  document.addEventListener('swup:page:view', initPhotoClick)
+</script>
