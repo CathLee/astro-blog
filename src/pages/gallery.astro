@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content'
 import LayoutDefault from '~/layouts/LayoutDefault.astro'
 import PhotoCard from '~/components/PhotoCard.astro'
-import ImageViewer from '~/components/ImageViewer.astro'
 
 // 获取所有影集内容并按日期排序
 const albumEntries = await getCollection('album')
@@ -72,13 +71,29 @@ const years = Object.keys(albumsByYear)
       )
     }
   </div>
-
-  <!-- 图片查看器 -->
-  <ImageViewer />
 </LayoutDefault>
 
+<script>
+  import { setupGalleryLightbox } from '~/scripts/ui/gallery-lightbox'
+
+  setupGalleryLightbox()
+</script>
+
 <style>
+  /* Performance optimizations for smooth scrolling */
+  .gallery-container {
+    /* Enable GPU acceleration */
+    transform: translateZ(0);
+    /* Optimize rendering performance */
+    contain: layout style paint;
+  }
+
   /* 时间轴主线 - 伪元素渐变效果 */
+  .timeline {
+    /* Optimize for scrolling performance */
+    contain: layout style;
+  }
+
   .timeline::before {
     content: '';
     position: absolute;
@@ -88,6 +103,29 @@ const years = Object.keys(albumsByYear)
     width: 3px;
     background: linear-gradient(to bottom, var(--c-primary) 0%, var(--c-primary) 100%);
     opacity: 0.2;
+    /* GPU acceleration */
+    transform: translateZ(0);
+  }
+
+  /* PhotoCard hover effect - optimized for performance */
+  .photo-card {
+    /* Prepare for hover transform */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-4px) translateZ(0);
+    box-shadow: 0 8px 24px var(--c-shadow);
+  }
+
+  /* Year marker - optimized for sticky positioning */
+  .year-marker {
+    /* Use GPU for smooth sticky scrolling */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   @media (max-width: 768px) {

@@ -4,7 +4,7 @@
 
 <button
   id="theme-toggle"
-  class="theme-toggle not-underline-hover inline-flex items-center cursor-pointer"
+  class="inline-flex items-center cursor-pointer border-none bg-transparent p-0 transition-transform duration-200 hover:scale-110 active:scale-95 not-underline-hover"
   aria-label="切换深色/浅色模式"
   title="切换主题"
 >
@@ -13,25 +13,20 @@
 </button>
 
 <script>
+  import { initWithSwup } from '~/scripts/dom/swup-lifecycle'
+  import { initTheme, toggleTheme } from '~/scripts/ui/theme-toggle'
+
   function initThemeToggle() {
     const toggle = document.getElementById('theme-toggle')
-    const html = document.documentElement
     const sunIcon = toggle?.querySelector('.sun-icon')
     const moonIcon = toggle?.querySelector('.moon-icon')
 
-    // 从 localStorage 读取保存的主题，如果没有则使用系统偏好
-    function getTheme() {
-      const stored = localStorage.getItem('theme')
-      if (stored) return stored
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    }
+    // Initialize theme on page load
+    initTheme()
 
-    // 应用主题
-    function applyTheme(theme: string) {
-      const isDark = theme === 'dark'
-      html.classList.toggle('dark', isDark)
-
-      // 更新图标显示
+    // Update icon based on current theme
+    function updateIcon() {
+      const isDark = document.documentElement.classList.contains('dark')
       if (sunIcon && moonIcon) {
         if (isDark) {
           sunIcon.classList.add('hidden')
@@ -41,50 +36,16 @@
           moonIcon.classList.add('hidden')
         }
       }
-
-      // 保存到 localStorage
-      localStorage.setItem('theme', theme)
     }
 
-    // 初始化主题
-    const currentTheme = getTheme()
-    applyTheme(currentTheme)
+    updateIcon()
 
-    // 切换主题
+    // Toggle theme on click
     toggle?.addEventListener('click', () => {
-      const currentTheme = getTheme()
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-      applyTheme(newTheme)
-    })
-
-    // 监听系统主题变化（仅当用户未手动设置时）
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches ? 'dark' : 'light')
-      }
+      toggleTheme()
+      updateIcon()
     })
   }
 
-  // 页面加载时初始化
-  initThemeToggle()
-
-  // 支持 Swup 页面转换
-  document.addEventListener('swup:contentReplaced', initThemeToggle)
+  initWithSwup(initThemeToggle)
 </script>
-
-<style>
-  .theme-toggle {
-    border: none;
-    background: transparent;
-    padding: 0;
-    transition: transform 0.2s ease;
-  }
-
-  .theme-toggle:hover {
-    transform: scale(1.1);
-  }
-
-  .theme-toggle:active {
-    transform: scale(0.95);
-  }
-</style>
