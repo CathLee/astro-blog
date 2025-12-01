@@ -1,0 +1,104 @@
+/**
+ * GLightbox Theme Customization
+ * Integrates GLightbox with the blog's light/dark theme system
+ */
+
+/* Import base GLightbox styles */
+@import 'glightbox/dist/css/glightbox.min.css';
+
+/* Light theme overrides */
+:root {
+  --glightbox-bg: rgba(255, 255, 255, 0.95);
+  --glightbox-text: #333;
+  --glightbox-icon-color: #333;
+  --glightbox-close-bg: rgba(0, 0, 0, 0.05);
+  --glightbox-close-bg-hover: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme overrides */
+:root.dark {
+  --glightbox-bg: rgba(0, 0, 0, 0.95);
+  --glightbox-text: #eee;
+  --glightbox-icon-color: #eee;
+  --glightbox-close-bg: rgba(255, 255, 255, 0.1);
+  --glightbox-close-bg-hover: rgba(255, 255, 255, 0.15);
+}
+
+/* Apply custom colors to GLightbox elements */
+.glightbox-container {
+  background-color: var(--glightbox-bg) !important;
+}
+
+.glightbox-container .gslide-description {
+  color: var(--glightbox-text);
+  background: transparent;
+}
+
+.glightbox-container .gslide-title {
+  color: var(--glightbox-text);
+  font-family: inherit;
+}
+
+/* Navigation arrows */
+.glightbox-container .gnext,
+.glightbox-container .gprev {
+  color: var(--glightbox-icon-color);
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.glightbox-container .gnext:hover,
+.glightbox-container .gprev:hover {
+  opacity: 1;
+}
+
+/* Close button */
+.glightbox-container .gclose {
+  color: var(--glightbox-icon-color);
+  background-color: var(--glightbox-close-bg);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s ease;
+}
+
+.glightbox-container .gclose:hover {
+  background-color: var(--glightbox-close-bg-hover);
+}
+
+/* Image description styling */
+.glightbox-container .gslide-desc {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Zoom icon */
+.glightbox-container .zoomed .gslide-image img {
+  cursor: zoom-out;
+}
+
+.glightbox-container .gslide-image img {
+  cursor: zoom-in;
+}
+
+/* Loading spinner color */
+.glightbox-container .gloader {
+  border-color: var(--glightbox-icon-color);
+  border-top-color: transparent;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .glightbox-container .gslide-description {
+    font-size: 0.8125rem;
+  }
+
+  .glightbox-container .gclose {
+    width: 36px;
+    height: 36px;
+    top: 10px;
+    right: 10px;
+  }
+}
