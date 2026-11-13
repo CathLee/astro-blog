@@ -29,6 +29,10 @@ export const userConfig: Partial<UserConfig> = {
         name: '影集',
         href: '/gallery',
       },
+      {
+        name: '工具',
+        href: '/tools',
+      },
     ],
   },
   appearance: {

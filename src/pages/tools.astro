@@ -1,0 +1,81 @@
+---
+import LayoutDefault from '~/layouts/LayoutDefault.astro'
+
+// 工具列表：每个工具是 public/tools/ 下的独立 HTML 页面
+const tools = [
+  {
+    name: 'EPUB 阅读器',
+    href: '/tools/epub-reader.html',
+    description: '在浏览器中直接阅读 EPUB 电子书，支持目录、字号调节和深色模式。文件只在本地读取，不会上传。',
+  },
+]
+---
+
+<LayoutDefault>
+  <div class="tools-container">
+    <header class="gallery-header">
+      <h1 class="gallery-title">工具</h1>
+      <p class="gallery-subtitle">一些顺手的小工具</p>
+    </header>
+
+    <ul class="tools-list">
+      {
+        tools.map((tool) => (
+          <li>
+            {/* Reason: 工具是独立页面，没有 Swup 容器，需绕过 Swup 做整页跳转 */}
+            <a class="tool-card" href={tool.href} data-no-swup>
+              <h2 class="tool-name">{tool.name}</h2>
+              <p class="tool-desc">{tool.description}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</LayoutDefault>
+
+<style>
+  .tools-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .tools-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .tool-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--c-bg-secondary);
+    background: var(--c-bg-secondary);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.12);
+  }
+
+  .tool-name {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: var(--c-primary);
+  }
+
+  .tool-desc {
+    margin: 0;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+</style>
