@@ -1,0 +1,46 @@
+# Build the blog and publish it to https://cathlee.github.io/ on every push to main.
+# Reason: the site is served from a separate repo (CathLee/Cathlee.github.io), so the
+# built output is pushed there over SSH using the PAGES_DEPLOY_KEY secret (a write
+# deploy key registered on that repo).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Version comes from the "packageManager" field in package.json
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+        env:
+          # Optional analytics IDs; set them as repository variables if used
+          PUBLIC_GOOGLE_ANALYTICS_ID: ${{ vars.PUBLIC_GOOGLE_ANALYTICS_ID }}
+          PUBLIC_UMAMI_ANALYTICS_ID: ${{ vars.PUBLIC_UMAMI_ANALYTICS_ID }}
+
+      # Also writes .nojekyll so GitHub serves the _astro/ folder
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.PAGES_DEPLOY_KEY }}
+          external_repository: CathLee/Cathlee.github.io
+          publish_branch: master
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: ${{ github.event.head_commit.message }}
